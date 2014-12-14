@@ -17,7 +17,7 @@ object ScalaJob {
       .setMaster("spark://scorpiovn:7077")
       .setAppName("SimpleJob")
       .setSparkHome(System.getenv("SPARK_HOME"))
-      .setJars(Array(System.getenv ("HOME") + "/git/maven-example/core/target/core-1.0.0.jar"))
+      .setJars(Array(System.getenv ("HOME") + "/git/jlab/core/target/core-1.0.0.jar"))
 
     val sc = new SparkContext(conf)
 
@@ -26,7 +26,7 @@ object ScalaJob {
     IOManager.delete(out)
     IOManager.delete(file)
 
-    analysis.process(out, "ed");
+    analysis.process(out);
     //    analysis.process()
     sc.stop()
 

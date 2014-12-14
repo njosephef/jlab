@@ -8,7 +8,7 @@ import org.apache.spark.SparkContext._ // import the implicit conversions from S
  */
 class Analysis(context: SparkContext, file: String) extends Serializable {
 
-  val regex = """[�0-9,.:;',.\/<>?!$()\-\"]""".r
+  val regex = """[�0-9,.:;',.\/<>?!$()\[\]\-\"]""".r
 
   def this(context: SparkContext) {
     this(context, "");
@@ -42,7 +42,7 @@ class Analysis(context: SparkContext, file: String) extends Serializable {
       .repartition(6)
       .flatMap(line => line.split("[\\s]"))
 //      .map(w => tags.replaceAllIn(w.trim.toLowerCase, ""))
-//      .map(w => regex_.replaceAllIn(w.trim.toLowerCase, ""))
+      .map(w => regex_.replaceAllIn(w.trim.toLowerCase, ""))
       .filter(w => !w.isEmpty && w.endsWith(suffix))
       .map(w => (w,1))
       .reduceByKey(_+_)
