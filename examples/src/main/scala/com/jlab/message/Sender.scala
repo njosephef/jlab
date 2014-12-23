@@ -5,6 +5,8 @@ import com.rabbitmq.client.Channel
 import play.api.Logger
 import play.api.libs.concurrent.Akka
 
+import scala.tools.scalap.scalax.util.StringUtil
+
 /**
  * Created by scorpiovn on 12/22/14.
  */
@@ -80,7 +82,7 @@ object Sender {
 class SendingActor(channel: Channel, queue: String) extends Actor {
   def receive = {
     case some: String => {
-      val msg = (some + " : " + System.currentTimeMillis())
+      val msg = (some + " : " + System.currentTimeMillis)
       channel.basicPublish("", queue, null, msg.getBytes())
       Logger.info(msg)
     }
