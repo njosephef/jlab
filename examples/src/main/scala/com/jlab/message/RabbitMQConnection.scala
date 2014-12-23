@@ -1,5 +1,7 @@
 package com.jlab.message
 
+import com.rabbitmq.client.{Connection, ConnectionFactory}
+
 /**
  * Created by scorpiovn on 12/22/14.
  */

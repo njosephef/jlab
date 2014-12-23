@@ -1,5 +1,9 @@
 package com.jlab.message
 
+import akka.actor.Actor
+import com.rabbitmq.client.Channel
+import play.api.Logger
+
 /**
  * Created by scorpiovn on 12/22/14.
  */
@@ -17,3 +21,4 @@ class PublishingActor(channel: Channel, exchange: String) extends Actor {
     case _ => {}
   }
 }
+

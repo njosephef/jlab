@@ -1,5 +1,8 @@
 package com.jlab.message
 
+import akka.actor.{Props, Actor}
+import com.rabbitmq.client.{Channel, QueueingConsumer}
+
 /**
  * Created by scorpiovn on 12/22/14.
  */
@@ -11,7 +14,6 @@ class ListeningActor(channel: Channel, queue: String, f: (String) => Any) extend
   }
 
   def startReceving = {
-
     val consumer = new QueueingConsumer(channel);
     channel.basicConsume(queue, true, consumer);
 

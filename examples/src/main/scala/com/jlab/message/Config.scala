@@ -1,5 +1,7 @@
 package com.jlab.message
 
+import com.typesafe.config.ConfigFactory
+
 /**
  * Created by scorpiovn on 12/22/14.
  */
