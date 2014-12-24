@@ -1,9 +1,8 @@
 package kvstore
 
 import akka.testkit.{ TestProbe, TestKit, ImplicitSender }
-import org.scalatest.BeforeAndAfterAll
+import org.scalatest.{FunSuiteLike, BeforeAndAfterAll, FunSuite}
 import org.scalatest.matchers.ShouldMatchers
-import org.scalatest.FunSuite
 import akka.actor.ActorSystem
 import scala.concurrent.duration._
 import kvstore.Arbiter.{ JoinedSecondary, Join }
@@ -12,7 +11,7 @@ import scala.util.Random
 import scala.util.control.NonFatal
 
 class Step2_SecondarySpec extends TestKit(ActorSystem("Step2SecondarySpec"))
-  with FunSuite
+  with FunSuiteLike
   with BeforeAndAfterAll
   with ShouldMatchers
   with ImplicitSender

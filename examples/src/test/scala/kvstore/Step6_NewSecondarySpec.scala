@@ -2,16 +2,15 @@ package kvstore
 
 import akka.testkit.TestKit
 import akka.testkit.ImplicitSender
-import org.scalatest.BeforeAndAfterAll
+import org.scalatest.{FunSuiteLike, BeforeAndAfterAll, FunSuite}
 import org.scalatest.matchers.ShouldMatchers
-import org.scalatest.FunSuite
 import akka.actor.ActorSystem
 import akka.testkit.TestProbe
 import Arbiter._
 import Replicator._
 
 class Step6_NewSecondarySpec extends TestKit(ActorSystem("Step6NewSecondarySpec"))
-  with FunSuite
+  with FunSuiteLike
   with BeforeAndAfterAll
   with ShouldMatchers
   with ImplicitSender

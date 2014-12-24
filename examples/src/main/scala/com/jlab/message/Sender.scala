@@ -1,11 +1,16 @@
 package com.jlab.message
 
+import java.util.concurrent.TimeUnit
+
 import akka.actor.{Actor, Props}
 import com.rabbitmq.client.Channel
 import play.api.Logger
 import play.api.libs.concurrent.Akka
+import play.api.Play.current
+import play.api.libs.concurrent.Execution.Implicits._
 
-import scala.tools.scalap.scalax.util.StringUtil
+import scala.concurrent.duration.FiniteDuration
+
 
 /**
  * Created by scorpiovn on 12/22/14.
@@ -13,6 +18,11 @@ import scala.tools.scalap.scalax.util.StringUtil
 object Sender {
 
   def startSending = {
+
+    println(Config.RABBITMQ_QUEUE)
+    println(Config.RABBITMQ_HOST)
+    println(Config.RABBITMQ_EXCHANGEE)
+
     // create the connection
     val connection = RabbitMQConnection.getConnection()
 
@@ -33,7 +43,7 @@ object Sender {
     // setup the listener that sends to a specific queue using the SendingActor
     setupListener(connection.createChannel(),Config.RABBITMQ_QUEUE, callback2)
 
-    Akka.system.scheduler.schedule(2 seconds, 1 seconds
+    Akka.system.scheduler.schedule(FiniteDuration(2.toLong, TimeUnit.SECONDS), FiniteDuration(1.toLong, TimeUnit.SECONDS)
       , Akka.system.actorOf(
           Props(new SendingActor(channel = sendingChannel, queue = Config.RABBITMQ_QUEUE))
         )
@@ -48,7 +58,7 @@ object Sender {
     val callback4 = (x: String) => Logger.info("Recieved on exchange callback 4: " + x)
 
     // create a channel for the listener and setup the first listener
-    val listenChannel1 = connection.createChannel();
+    val listenChannel1 = connection.createChannel()
     setupListener(listenChannel1,listenChannel1.queueDeclare().getQueue(),
       Config.RABBITMQ_EXCHANGEE, callback3)
 
@@ -59,7 +69,7 @@ object Sender {
 
     // create an actor that is invoked every two seconds after a delay of
     // two seconds with the message "msg"
-    Akka.system.scheduler.schedule(2 seconds, 1 seconds
+    Akka.system.scheduler.schedule(FiniteDuration(2.toLong, TimeUnit.SECONDS), FiniteDuration(1.toLong, TimeUnit.SECONDS)
       , Akka.system.actorOf(
           Props(new PublishingActor(channel = sendingChannel2, exchange = Config.RABBITMQ_EXCHANGEE))
         )
@@ -67,14 +77,14 @@ object Sender {
   }
 
   private def setupListener(receivingChannel: Channel, queue: String, f: (String) => Any) {
-    Akka.system.scheduler.scheduleOnce(2 seconds,
+    Akka.system.scheduler.scheduleOnce(FiniteDuration(2.toLong, TimeUnit.SECONDS),
       Akka.system.actorOf(Props(new ListeningActor(receivingChannel, queue, f))), "")
   }
 
   private def setupListener(channel: Channel, queueName : String, exchange: String, f: (String) => Any) {
     channel.queueBind(queueName, exchange, "")
 
-    Akka.system.scheduler.scheduleOnce(2 seconds,
+    Akka.system.scheduler.scheduleOnce(FiniteDuration(2.toLong, TimeUnit.SECONDS),
       Akka.system.actorOf(Props(new ListeningActor(channel, queueName, f))), "")
   }
 }

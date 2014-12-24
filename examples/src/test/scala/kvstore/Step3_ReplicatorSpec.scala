@@ -1,9 +1,8 @@
 package kvstore
 
 import akka.testkit.{ TestProbe, TestKit, ImplicitSender }
-import org.scalatest.BeforeAndAfterAll
+import org.scalatest.{FunSuiteLike, BeforeAndAfterAll, FunSuite}
 import org.scalatest.matchers.ShouldMatchers
-import org.scalatest.FunSuite
 import akka.actor.ActorSystem
 import scala.concurrent.duration._
 import kvstore.Arbiter.{ JoinedSecondary, Join }
@@ -11,7 +10,7 @@ import kvstore.Persistence.{ Persisted, Persist }
 import kvstore.Replicator.{ SnapshotAck, Snapshot, Replicate }
 
 class Step3_ReplicatorSpec extends TestKit(ActorSystem("Step3ReplicatorSpec"))
-  with FunSuite
+  with FunSuiteLike
   with BeforeAndAfterAll
   with ShouldMatchers
   with ImplicitSender

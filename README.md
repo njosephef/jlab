@@ -4,6 +4,7 @@ An example project
 
 run:
     //mvn scala:run -DmainClass=com.jlab.demo.ScalaJob
+    mvn scala:run -DmainClass=com.jlab.message.URLReader
 
 CentOS
 - spark://localhost.localdomain:7077

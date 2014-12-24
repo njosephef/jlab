@@ -5,7 +5,7 @@ import scala.concurrent.duration.FiniteDuration
 import akka.testkit.TestProbe
 import akka.actor.{ ActorRef, Actor }
 import org.scalatest.matchers.ShouldMatchers
-import org.scalatest.FunSuite
+import org.scalatest.{FunSuiteLike, FunSuite}
 import akka.actor.Props
 import akka.testkit.TestKit
 import akka.testkit.ImplicitSender
@@ -22,9 +22,8 @@ object Tools {
  * to a given replica. It will keep track of requested updates and allow 
  * simple verification. See e.g. Step 1 for how it can be used.
  */
-trait Tools { this: TestKit with FunSuite with ShouldMatchers with ImplicitSender =>
+trait Tools { this: TestKit with FunSuiteLike with ShouldMatchers with ImplicitSender =>
   
-  import Arbiter._
   import Tools._
 
   def probeProps(probe: TestProbe): Props = Props(classOf[TestRefWrappingActor], probe)

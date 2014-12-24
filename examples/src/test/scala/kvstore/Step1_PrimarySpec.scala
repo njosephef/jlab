@@ -2,20 +2,13 @@ package kvstore
 
 import akka.testkit.TestKit
 import akka.actor.ActorSystem
-import org.scalatest.FunSuite
-import org.scalatest.BeforeAndAfterAll
+import org.scalatest.{FunSuiteLike, BeforeAndAfterAll}
 import org.scalatest.matchers.ShouldMatchers
 import akka.testkit.ImplicitSender
 import akka.testkit.TestProbe
-import scala.concurrent.duration._
-import kvstore.Persistence.{ Persisted, Persist }
-import kvstore.Replica.OperationFailed
-import kvstore.Replicator.{ Snapshot }
-import scala.util.Random
-import scala.util.control.NonFatal
 
 class Step1_PrimarySpec extends TestKit(ActorSystem("Step1PrimarySpec"))
-  with FunSuite
+  with FunSuiteLike
   with BeforeAndAfterAll
   with ShouldMatchers
   with ImplicitSender

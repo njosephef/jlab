@@ -8,6 +8,7 @@
   <artifactId>examples</artifactId>
   <version>1.0.0</version>
   <packaging>jar</packaging>
+  <name>${project.artifactId}</name>
 
   <parent>
     <groupId>org.jlab</groupId>

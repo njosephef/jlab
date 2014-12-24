@@ -2,9 +2,8 @@ package kvstore
 
 import akka.testkit.TestKit
 import akka.testkit.ImplicitSender
-import org.scalatest.BeforeAndAfterAll
+import org.scalatest.{FunSuiteLike, BeforeAndAfterAll, FunSuite}
 import org.scalatest.matchers.ShouldMatchers
-import org.scalatest.FunSuite
 import akka.actor.ActorSystem
 import akka.testkit.TestProbe
 import scala.concurrent.duration._
@@ -12,7 +11,7 @@ import Arbiter._
 import Persistence._
 
 class Step4_SecondaryPersistenceSpec extends TestKit(ActorSystem("Step4SecondaryPersistenceSpec"))
-  with FunSuite
+  with FunSuiteLike
   with BeforeAndAfterAll
   with ShouldMatchers
   with ImplicitSender
