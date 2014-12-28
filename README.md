@@ -16,5 +16,7 @@ Ubuntu
 - ./bin/spark-class org.apache.spark.deploy.worker.Worker spark://scorpiovn:7077
 - ./bin/spark-submit --class com.jlab.demo.ScalaJob --master spark://scorpiovn:7077 /home/scorpiovn/git/maven-example/core/target/core-1.0.0.jar /data/economist/*.txt /home/scorpiovn/sparkout/economist.text
 
+FiniteDuration(2.toLong, TimeUnit.SECONDS)
+
 
 

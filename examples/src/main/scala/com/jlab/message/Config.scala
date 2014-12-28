@@ -9,7 +9,6 @@ import com.typesafe.config.ConfigFactory
  */
 object Config {
   val conf = ConfigFactory.load()
-//  println("The answer is: " + conf.getString("simple-app.answer"))
 //  val config = ConfigFactory.parseFile(new File("message.conf")).resolve()
   val RABBITMQ_HOST = conf.getString("rabbitmq.host")
   val RABBITMQ_QUEUE = conf.getString("rabbitmq.queue")
