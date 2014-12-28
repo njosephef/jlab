@@ -13,6 +13,7 @@
     <module>examples</module>
     <module>core</module>
     <module>fetch</module>
+    <module>extractor</module>
   </modules>
 
   <dependencies>

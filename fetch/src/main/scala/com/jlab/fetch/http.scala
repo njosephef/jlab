@@ -116,7 +116,7 @@ class HttpFetcher(config: Config,
 
 //    data + ("fetch_compress", "none")
 
-    log.info("data information " + data.toJson())
+//    log.info("data information " + data.toJson())
 
     val proxy = if (data exists "fetch_proxy_host")
                   Some((data("fetch_proxy_host"), if (data exists "fetch_proxy_port") data("fetch_proxy_port").toInt else 80))

@@ -34,17 +34,17 @@ object Sender {
     val sendingChannel = connection.createChannel()
 
     // make sure the queue exists we want to send to
-    sendingChannel.queueDeclare(Config.RABBITMQ_QUEUE, false, false, false, null)
+//    sendingChannel.queueDeclare(Config.RABBITMQ_QUEUE, false, false, false, null)
 
     val system: ActorSystem = ActorSystem("MySystem")
 
     val sendingActor: ActorRef = system.actorOf(Props(new SendingActor(channel = sendingChannel, queue = Config.RABBITMQ_QUEUE)))
 
-    system.scheduler.schedule(
+    /*system.scheduler.schedule(
       Duration.create(100, TimeUnit.MILLISECONDS)
       , Duration.create(1, TimeUnit.SECONDS)
       , sendingActor
-      , "MSG to Queue")
+      , "MSG to Queue")*/
 
     val callback1 = (x: String) => Logger.info("Recieved on queue callback 1: " + x);
 
