@@ -38,7 +38,7 @@ object Sender {
 
     val system: ActorSystem = ActorSystem("MySystem")
 
-    val sendingActor: ActorRef = system.actorOf(Props(new SendingActor(channel = sendingChannel, queue = Config.RABBITMQ_QUEUE)))
+    val sendingActor: ActorRef = system.actorOf(Props(new SendingActor(channel = sendingChannel, queue = Config.RABBITMQ_QUEUE_URL)))
 
     /*system.scheduler.schedule(
       Duration.create(100, TimeUnit.MILLISECONDS)
@@ -48,37 +48,37 @@ object Sender {
 
     val callback1 = (x: String) => Logger.info("Recieved on queue callback 1: " + x);
 
-    setupListener(connection.createChannel(), Config.RABBITMQ_QUEUE, callback1);
+    setupListener(connection.createChannel(), Config.RABBITMQ_QUEUE_HTML, callback1);
 
     // create an actor that starts listening on the specified queue and passes the
     // received message to the provided callback
     val callback2 = (x: String) => Logger.info("Recieved on queue callback 2: " + x);
 
     // setup the listener that sends to a specific queue using the SendingActor
-    setupListener(connection.createChannel(), Config.RABBITMQ_QUEUE, callback2);
+    setupListener(connection.createChannel(), Config.RABBITMQ_QUEUE_HTML, callback2);
 
     // create a new sending channel on which we declare the exchange
     val sendingChannel2 = connection.createChannel();
-    sendingChannel2.exchangeDeclare(Config.RABBITMQ_EXCHANGEE, "fanout");
+    sendingChannel2.exchangeDeclare(Config.RABBITMQ_EXCHANGE_HTML, "fanout");
 
     // define the two callbacks for our listeners
     val callback3 = (x: String) => Logger.info("Recieved on exchange callback 3: " + x);
 
     // create a channel for the listener and setup the first listener
     val listenChannel1 = connection.createChannel();
-    setupListener(listenChannel1,listenChannel1.queueDeclare().getQueue(), Config.RABBITMQ_EXCHANGEE, callback3);
+    setupListener(listenChannel1,listenChannel1.queueDeclare().getQueue(), Config.RABBITMQ_EXCHANGE_HTML, callback3);
 
     val callback4 = (x: String) => Logger.info("Recieved on exchange callback 4: " + x);
 
     // create another channel for a listener and setup the second listener
     val listenChannel2 = connection.createChannel();
-    setupListener(listenChannel2,listenChannel2.queueDeclare().getQueue(), Config.RABBITMQ_EXCHANGEE, callback4);
+    setupListener(listenChannel2,listenChannel2.queueDeclare().getQueue(), Config.RABBITMQ_EXCHANGE_HTML, callback4);
 
     // create an actor that is invoked every two seconds after a delay of
     // two seconds with the message "msg"
     system.scheduler.schedule(Duration.create(2, TimeUnit.SECONDS), Duration.create(1, TimeUnit.SECONDS), system.actorOf(Props(
       new PublishingActor(channel = sendingChannel2
-        , exchange = Config.RABBITMQ_EXCHANGEE))),
+        , exchange = Config.RABBITMQ_EXCHANGE_HTML))),
       "MSG to Exchange")
   }
 
@@ -102,9 +102,9 @@ object URLReading {
     val connection = RabbitMQConnection.getConnection()
     val urlChannel = connection.createChannel()
     // make sure the queue exists we want to send to
-    urlChannel.queueDeclare(Config.RABBITMQ_QUEUE, false, false, false, null)
+    urlChannel.queueDeclare(Config.RABBITMQ_QUEUE_URL, false, false, false, null)
 
-    createSender(channel = urlChannel, queue = Config.RABBITMQ_QUEUE)
+    createSender(channel = urlChannel, queue = Config.RABBITMQ_QUEUE_URL)
   }
 
   private def createSender(channel: Channel, queue: String): Unit = {

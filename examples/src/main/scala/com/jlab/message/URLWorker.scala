@@ -6,6 +6,7 @@ import akka.actor.{Props, ActorRef, ActorSystem}
 import com.rabbitmq.client.Channel
 
 import scala.concurrent.duration.Duration
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Created by scorpiovn on 12/29/14.

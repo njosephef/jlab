@@ -36,8 +36,8 @@ object ReadExchange {
 
     // create another channel for a listener and setup the second listener
     val listenChannel2 = connection.createChannel();
-    println(Config.RABBITMQ_QUEUE)
-    setupListener(listenChannel2,Config.RABBITMQ_QUEUE, Config.RABBITMQ_EXCHANGEE, callback4);
+    println(Config.RABBITMQ_QUEUE_HTML)
+    setupListener(listenChannel2,Config.RABBITMQ_QUEUE_HTML, Config.RABBITMQ_EXCHANGE_HTML, callback4);
   }
 
   private def setupListener(channel: Channel, queueName : String, exchange: String, f: (String) => Any) {

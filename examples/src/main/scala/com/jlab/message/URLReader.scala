@@ -6,6 +6,6 @@ package com.jlab.message
 object URLReader {
   def main(args: Array[String]) {
 //    Sender.startSending
-    URLReading.readFromFile
+    URLWorker.readFromFile
   }
 }

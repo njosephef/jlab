@@ -42,8 +42,9 @@ object HTMLFilter {
 
       // create another channel for a listener and setup the second listener
       val listenChannel2 = connection.createChannel();
-      println(Config.RABBITMQ_QUEUE)
-      setupListener(listenChannel2,Config.RABBITMQ_QUEUE, Config.RABBITMQ_EXCHANGEE, callback4);
+      listenChannel2.queueDeclare(Config.RABBITMQ_QUEUE_HTML, false, false, false, null)
+      println(Config.RABBITMQ_QUEUE_HTML)
+      setupListener(listenChannel2,listenChannel2.queueDeclare().getQueue(), Config.RABBITMQ_EXCHANGE_HTML, callback4);
 
     }
     catch {
