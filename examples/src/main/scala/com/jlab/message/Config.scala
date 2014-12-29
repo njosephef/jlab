@@ -1,7 +1,5 @@
 package com.jlab.message
 
-import java.io.File
-
 import com.typesafe.config.ConfigFactory
 
 /**
@@ -11,6 +9,7 @@ object Config {
   val conf = ConfigFactory.load()
 //  val config = ConfigFactory.parseFile(new File("message.conf")).resolve()
   val RABBITMQ_HOST = conf.getString("rabbitmq.host")
-  val RABBITMQ_QUEUE = conf.getString("rabbitmq.queue")
-  val RABBITMQ_EXCHANGEE = conf.getString("rabbitmq.exchange")
+  val RABBITMQ_QUEUE_URL = conf.getString("rabbitmq.queue.url")
+  val RABBITMQ_QUEUE_HTML = conf.getString("rabbitmq.queue.html")
+  val RABBITMQ_EXCHANGE_HTML = conf.getString("rabbitmq.exchange.html")
 }
