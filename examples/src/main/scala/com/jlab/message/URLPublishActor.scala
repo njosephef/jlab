@@ -14,11 +14,11 @@ class URLPublishActor(channel: Channel, queue: String) extends Actor {
   def receive = {
     case some: String => {
       log.info(some)
-      Source.fromFile(System.getenv ("HOME") + "/data/url.txt").getLines.foreach {
+      Source.fromFile(System.getenv ("HOME") + "/data/url.txt").getLines().foreach {
         line => {
           log.info (line)
           val msg = line
-          channel.basicPublish ("", queue, null, msg.getBytes ())
+          channel.basicPublish("", queue, null, msg.getBytes)
         }
       }
     }
