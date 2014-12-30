@@ -14,7 +14,12 @@ class URLPublishActor(channel: Channel, queue: String) extends Actor {
   def receive = {
     case some: String => {
       log.info(some)
-      Source.fromFile(System.getenv ("HOME") + "/data/url.txt").getLines().foreach {
+      def homeDir(envar: Option[String]) = envar match {
+        case Some(envar) => envar
+        case _ => """C:\"""
+      }
+
+      Source.fromFile(homeDir(Option(System.getenv("HOME"))) + "/data/url.txt").getLines().foreach {
         line => {
           log.info (line)
           val msg = line

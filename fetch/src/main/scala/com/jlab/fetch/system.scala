@@ -77,11 +77,11 @@ class Pipeline(config: Config, control: Control, actorSystem: ActorSystem) {
 
   def createWriteback(config: Config): ActorRef = {
     val klass = config("class")
-    println(klass)
+    println("klass >>> " + klass)
     klass match {
       case "fileBatchWriteback" => actorSystem.actorOf(Props(new fileBatchWriteback(config, control)))
       case "amqpBatchWriteback" =>
-        amqpConnection._2.exchangeDeclare(config("exchange"), "fanout")
+        amqpConnection._2.exchangeDeclare(config("exchange"), "direct")
         actorSystem.actorOf(Props(new amqpBatchWriteback(config, control, amqpConnection._2)))
       case (e: String) => throw (new ClassNotFound(e))
     }

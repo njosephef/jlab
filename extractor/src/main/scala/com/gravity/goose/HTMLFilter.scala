@@ -42,9 +42,9 @@ object HTMLFilter {
 
       // create another channel for a listener and setup the second listener
       val listenChannel2 = connection.createChannel();
-      listenChannel2.queueDeclare(Config.RABBITMQ_QUEUE_HTML, false, false, false, null)
-      println(Config.RABBITMQ_QUEUE_HTML)
-      setupListener(listenChannel2,listenChannel2.queueDeclare().getQueue(), Config.RABBITMQ_EXCHANGE_HTML, callback4);
+//      listenChannel2.queueDeclare(Config.RABBITMQ_QUEUE_HTML, false, false, false, null)
+      println(listenChannel2.queueDeclare().getQueue())
+      setupListener(listenChannel2, listenChannel2.queueDeclare().getQueue(), Config.RABBITMQ_EXCHANGE_HTML, callback4);
 
     }
     catch {
@@ -54,11 +54,11 @@ object HTMLFilter {
     }
   }
 
-  private def setupListener(channel: Channel, queueName : String, exchange: String, f: (String) => Any) {
-    channel.queueBind(queueName, exchange, "");
+  private def setupListener(channel: Channel, queueName : String, exchange: String, func: (String) => Any) {
+    channel.queueBind(queueName, exchange, "200");
     val system: ActorSystem = ActorSystem("MySystem")
     system.scheduler.scheduleOnce(Duration.create(1, TimeUnit.SECONDS),
-      system.actorOf(Props(new OnMessage(channel, queueName, f))), "");
+      system.actorOf(Props(new OnMessage(channel, queueName, func))), "");
   }
 
   private def extract(x: String): Unit = {

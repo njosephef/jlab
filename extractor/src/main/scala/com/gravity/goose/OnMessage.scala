@@ -6,7 +6,7 @@ import com.rabbitmq.client.{Channel, QueueingConsumer}
 /**
  * Created by scorpiovn on 12/22/14.
  */
-class OnMessage(channel: Channel, queue: String, f: (String) => Any) extends Actor {
+class OnMessage(channel: Channel, queue: String, func: (String) => Any) extends Actor {
 
   // called on the initial run
   def receive = {
@@ -26,7 +26,7 @@ class OnMessage(channel: Channel, queue: String, f: (String) => Any) extends Act
       // and execute this in a subactor
       context.actorOf(Props(new Actor {
         def receive = {
-          case some: String => f(some);
+          case some: String => func(some);
         }
       })) ! msg
     }

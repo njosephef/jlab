@@ -87,8 +87,6 @@ class HttpFetcher(config: Config,
     val entity = response.getEntity()
     val page = EntityUtils.toByteArray(entity)
 
-    println(">>>>>>> " + page)
-
     val status = response.getStatusLine()
     val code = status.getStatusCode()
     EntityUtils.consume(entity)

@@ -12,7 +12,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
  * Created by scorpiovn on 12/29/14.
  */
 object URLWorker {
-  def readFromFile = {
+  def start = {
     val connection = RabbitMQConnection.getConnection()
     val urlChannel = connection.createChannel()
     // make sure the queue exists we want to send to
@@ -23,7 +23,7 @@ object URLWorker {
 
   private def createSender(channel: Channel, queue: String): Unit = {
     val system: ActorSystem = ActorSystem("MySystem")
-    val sendingActor: ActorRef = system.actorOf(Props(new URLReadingActor(channel, queue)))
+    val sendingActor: ActorRef = system.actorOf(Props(new URLPublishActor(channel, queue)))
     system.scheduler.schedule(
       Duration.create(2, TimeUnit.MILLISECONDS)
       , Duration.create(15, TimeUnit.SECONDS)
