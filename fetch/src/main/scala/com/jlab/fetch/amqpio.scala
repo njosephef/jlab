@@ -5,7 +5,7 @@ import com.rabbitmq.client.{MessageProperties, Channel}
 // Prefetching an AMQP queue
 class amqpBatchPrefetcher(config: Config
                           , control: Control
-                          , chan: Channel)
+                          , channel: Channel)
       extends genericBatchProducer[Data](
         config.getInt("batch_size")
         , config.getInt("threshold_in_batches")
@@ -23,7 +23,7 @@ class amqpBatchPrefetcher(config: Config
 
   def getMessage(): Data = {
     val autoAck = false
-    val response = chan.basicGet(queue, autoAck)
+    val response = channel.basicGet(queue, autoAck)
 
     if (null == response) { throw new EmptyQueue }
 
