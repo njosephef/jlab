@@ -3,6 +3,7 @@ package com.gravity.goose
 import java.io.File
 
 import org.apache.commons.io.FileUtils
+import org.jlab.model.TextMessage
 import org.json4s.ShortTypeHints
 import org.json4s.native.Serialization
 
@@ -12,8 +13,8 @@ import org.json4s.native.Serialization
  * Date: 5/13/11
  */
 
-case class TextContent(title: String, body: String)
-case class HTMLContent(val url: String, val html: String)
+//case class TextContent(title: String, body: String)
+//case class Message(val url: String, val html: String)
 
 object TalkToMeGoose {
   /**
@@ -44,12 +45,12 @@ object TalkToMeGoose {
       implicit val formats = Serialization.formats(
         ShortTypeHints(
           List(
-            classOf[TextContent]
+            classOf[TextMessage]
           )
         )
       )
 
-      val textContent = new TextContent(url, article.cleanedArticleText)
+      val textContent = new TextMessage(url, article.cleanedArticleText)
 //      val json = Serialization.write(textContent)
 
       FileUtils.write(new File("test.json"), Serialization.writePretty(textContent).toString, "UTF-8")
