@@ -35,8 +35,8 @@ class amqpBatchPrefetcher(config: Config
     d + ("fetch_queue_delivery_tag", deliveryTag.toString)
   }
 
-  override def getBatch(sz:Int):Option[List[Data]] = {
-    def rec(c:Int, l:List[Data]):List[Data] = { 
+  override def getBatch(sz: Int): Option[List[Data]] = {
+    def rec(c:Int, l: List[Data]): List[Data] = {
       try { 
         if (0 == c) { l } 
         else { rec(c-1, getMessage()::l ) } 
@@ -46,7 +46,7 @@ class amqpBatchPrefetcher(config: Config
 
     val l = rec(sz, List[Data]())
     val ls = l.length
-    if (ls > 0) { log.info("Fetched "+ls.toString+" message(s) from "+queue) }
+    if (ls > 0) { log.info("Fetched " + ls.toString + " message(s) from " + queue) }
     if (l isEmpty) { None } else { return Some(l) }
   }
   
@@ -63,7 +63,7 @@ class amqpBatchWriteback(config: Config, control: Control, channel: Channel) ext
     batch match {
       case x::xs => {
         val deliveryTag = (x get "fetch_queue_delivery_tag").toLong
-        val key= try {
+        val key = try {
             (x get "fetch_status_code") match {
               case "200" => "200"
               case s if s.matches("^4\\d\\d") => "4xx"
@@ -71,7 +71,7 @@ class amqpBatchWriteback(config: Config, control: Control, channel: Channel) ext
             }
         } catch { case _ => "Error" }
 
-        val fqp= "fetch_routing_key"
+        val fqp = "fetch_routing_key"
 //        log.info(x(fqp))
         val fullkey = if(x exists fqp) { x(fqp)+ ":" + key } else { key }
 //        log.info(x("fetch_data"))
@@ -83,6 +83,5 @@ class amqpBatchWriteback(config: Config, control: Control, channel: Channel) ext
       case Nil => ()
     }
   }
-
 }
 
