@@ -9,15 +9,17 @@ import scala.io.Source
 /**
  * Created by scorpiovn on 12/29/14.
  */
-class URLReadingActor(channel: Channel, queue: String) extends Actor {
+class URLPublishActor(channel: Channel, queue: String) extends Actor {
   val log = Logging(context.system, this)
   def receive = {
     case some: String => {
       log.info(some)
       Source.fromFile(System.getenv ("HOME") + "/data/url.txt").getLines.foreach {
-        line => log.info(line)
+        line => {
+          log.info (line)
           val msg = line
-          channel.basicPublish("", queue, null, msg.getBytes());
+          channel.basicPublish ("", queue, null, msg.getBytes ())
+        }
       }
     }
     case _ => {}
