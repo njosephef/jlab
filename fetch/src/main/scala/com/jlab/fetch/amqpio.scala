@@ -1,6 +1,8 @@
 package com.jlab.fetch
 
-import com.rabbitmq.client.{MessageProperties, Channel}
+import com.rabbitmq.client.{Channel, MessageProperties}
+import org.json4s.ShortTypeHints
+import org.json4s.jackson.Serialization
 
 // Prefetching an AMQP queue
 class amqpBatchPrefetcher(config: Config
@@ -70,12 +72,29 @@ class amqpBatchWriteback(config: Config, control: Control, channel: Channel) ext
               case _ => "Error" 
             }
         } catch { case _ => "Error" }
-
+        log.info(">>>>> " + x("fetch_status_code"))
         val fqp = "fetch_routing_key"
 //        log.info(x(fqp))
         val fullkey = if(x exists fqp) { x(fqp)+ ":" + key } else { key }
 //        log.info(x("fetch_data"))
-        channel.basicPublish(exch, fullkey, MessageProperties.PERSISTENT_TEXT_PLAIN, x.toBytes)
+        log.info(fullkey)
+
+
+        // get just important information, fetch_url and fetch_data
+        // then convert them to a json string
+        implicit val formats = Serialization.formats(
+          ShortTypeHints(
+            List(
+              classOf[HTMLContent]
+            )
+          )
+        )
+
+        val content = new HTMLContent(x("fetch_url"), x("fetch_data"))
+        val json = Serialization.writePretty(content)
+        log.info(json)
+
+        channel.basicPublish(exch, fullkey, MessageProperties.PERSISTENT_TEXT_PLAIN, json.getBytes())
         channel.basicAck(deliveryTag, false)
         log.info("Publishing message to " + exch + " and acking delivery tag " + deliveryTag)
         resell(xs) 

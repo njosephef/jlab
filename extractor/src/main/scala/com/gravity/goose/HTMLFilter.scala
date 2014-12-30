@@ -3,17 +3,16 @@ package com.gravity.goose
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-import akka.actor.{Props, ActorSystem}
+import akka.actor.{ActorSystem, Props}
 import com.gravity.goose.utils.Filter
-import com.jlab.message.{RabbitMQConnection, Config}
+import com.jlab.message.{Config, RabbitMQConnection}
 import com.rabbitmq.client.Channel
 import org.apache.commons.io.FileUtils
 import org.json4s._
-import org.json4s.jackson.JsonMethods._
 import org.json4s.native.Serialization
 
-import scala.concurrent.duration.Duration
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
 import scala.util.Random
 
 object HTMLFilter {
@@ -37,14 +36,15 @@ object HTMLFilter {
   def main(args: Array[String]) {
     try {
       val connection = RabbitMQConnection.getConnection()
-
-      val callback4 = (x: String) => extract(x)
+      val listenChannel2 = connection.createChannel()
+      listenChannel2.exchangeDeclare( Config.RABBITMQ_EXCHANGE_HTML, "direct");
 
       // create another channel for a listener and setup the second listener
-      val listenChannel2 = connection.createChannel();
-//      listenChannel2.queueDeclare(Config.RABBITMQ_QUEUE_HTML, false, false, false, null)
-      println(listenChannel2.queueDeclare().getQueue())
-      setupListener(listenChannel2, listenChannel2.queueDeclare().getQueue(), Config.RABBITMQ_EXCHANGE_HTML, callback4);
+      listenChannel2.queueDeclare(Config.RABBITMQ_QUEUE_HTML, false, false, false, null)
+      println("queue " + Config.RABBITMQ_QUEUE_HTML)
+
+      val callback4 = (x: HTMLContent) => extract(x)
+      setupListener(listenChannel2, Config.RABBITMQ_QUEUE_HTML, Config.RABBITMQ_EXCHANGE_HTML, callback4);
 
     }
     catch {
@@ -54,14 +54,15 @@ object HTMLFilter {
     }
   }
 
-  private def setupListener(channel: Channel, queueName : String, exchange: String, func: (String) => Any) {
+  private def setupListener(channel: Channel, queueName : String, exchange: String, func: (HTMLContent) => Any) {
     channel.queueBind(queueName, exchange, "200");
     val system: ActorSystem = ActorSystem("MySystem")
     system.scheduler.scheduleOnce(Duration.create(1, TimeUnit.SECONDS),
       system.actorOf(Props(new OnMessage(channel, queueName, func))), "");
   }
 
-  private def extract(x: String): Unit = {
+  private def extract(html: HTMLContent): Unit = {
+    println("The callback function called")
     implicit val formats = Serialization.formats(
       ShortTypeHints(
         List(
@@ -71,20 +72,21 @@ object HTMLFilter {
       )
     )
 
-    printf(x)
-    val json = parse(x)
-    val htmlContent = json.extract[HTMLContent]
+//    printf("before pretty "+x)
+    printf("x can be null")
+//    val json = parse(x)
+//    val htmlContent = json.extract[HTMLContent]
 
     val config: Configuration = new Configuration
     config.enableImageFetching = false
     val filter = new Filter(config)
-    val article = filter.filter(htmlContent.url, htmlContent.html);
+    val article = filter.filter(html.url, html.html)
     println(article.cleanedArticleText)
 
-    val textContent = new TextContent(htmlContent.url, article.cleanedArticleText)
+    val textContent = new TextContent(html.url, article.cleanedArticleText)
 
     FileUtils.write(new File("test.json" + Random.nextLong()), Serialization.writePretty(textContent).toString, "UTF-8")
-
+    printf("finished")
   }
 }
 
