@@ -16,7 +16,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.util.Random
 
-import org.jlab.model.{TextMessage, HTMLMessage, Message}
+//import org.jlab.model.{TextMessage, HTMLMessage, Message}
+
+//case class Message(url: String, html: String)
+
+case class HTMLMessage(url: String, html: String)
+
+case class TextMessage(title: String, body: String)
 
 object HTMLFilter {
   def main(args: Array[String]) {
@@ -29,8 +35,8 @@ object HTMLFilter {
       listenChannel2.queueDeclare(Config.RABBITMQ_QUEUE_HTML, false, false, false, null)
       println("queue " + Config.RABBITMQ_QUEUE_HTML)
 
-      val callback4 = (x: Message) => extract(x)
-      setupListener(listenChannel2, Config.RABBITMQ_QUEUE_HTML, Config.RABBITMQ_EXCHANGE_HTML, callback4);
+      val callback = (x: Message) => extract(x)
+      setupListener(listenChannel2, Config.RABBITMQ_QUEUE_HTML, Config.RABBITMQ_EXCHANGE_HTML, callback);
 
     }
     catch {
@@ -53,25 +59,28 @@ object HTMLFilter {
       ShortTypeHints(
         List(
           classOf[TextMessage],
-          classOf[HTMLMessage]
+          classOf[Message]
         )
       )
     )
 
 //    printf("before pretty "+x)
-    printf("x can be null")
-    val json = JsonMethods.parse(message.body.toString)
-    val htmlMsg = json.extract[HTMLMessage]
+//    printf("x can be null " + message)
+//    val json = JsonMethods.parse(message)
+//    val htmlMsg = json.extract[Message]
+//  println(">>> " + htmlMsg)
 
     val config: Configuration = new Configuration
     config.enableImageFetching = false
     val filter = new Filter(config)
-    val article = filter.filter(htmlMsg.url, htmlMsg.html)
+    val article = filter.filter(message.url, message.html)
     println(article.cleanedArticleText)
 
-    val textMsg = new TextMessage(htmlMsg.url, article.cleanedArticleText)
+    val textMsg = new TextMessage(message.url, article.cleanedArticleText)
+
 
     FileUtils.write(new File("test.json" + Random.nextLong()), Serialization.writePretty(textMsg).toString, "UTF-8")
+
     printf("finished")
   }
 }

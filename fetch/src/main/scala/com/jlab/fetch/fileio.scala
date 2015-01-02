@@ -6,7 +6,7 @@ import org.apache.commons.io.FileUtils
 import org.json4s.ShortTypeHints
 import org.json4s.jackson.Serialization
 
-case class HTMLContent(url:String, html:String)
+case class Message(url:String, html:String)
 
 // Taking URLs in batches from a file
 class fileBatchPrefetcher(config: Config, control: Control)
@@ -50,12 +50,12 @@ class fileBatchWriteback(config: Config, control: Control) extends genericBatchR
           implicit val formats = Serialization.formats(
             ShortTypeHints(
               List(
-                classOf[HTMLContent]
+                classOf[Message]
               )
             )
           )
 
-          val content = new HTMLContent(x("fetch_url"), x("fetch_data"))
+          val content = new Message(x("fetch_url"), x("fetch_data"))
           val json = Serialization.writePretty(content)
           FileUtils writeStringToFile(new File(fileName), json, "UTF-8")
           log.info(json)

@@ -26,7 +26,7 @@ object URLWorker {
     val sendingActor: ActorRef = system.actorOf(Props(new URLPublishActor(channel, queue)))
     system.scheduler.schedule(
       Duration.create(2, TimeUnit.MILLISECONDS)
-      , Duration.create(15, TimeUnit.SECONDS)
+      , Duration.create(30, TimeUnit.SECONDS)
       , sendingActor
       , "MSG to Queue")
   }

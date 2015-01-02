@@ -85,12 +85,12 @@ class amqpBatchWriteback(config: Config, control: Control, channel: Channel) ext
         implicit val formats = Serialization.formats(
           ShortTypeHints(
             List(
-              classOf[HTMLContent]
+              classOf[Message]
             )
           )
         )
 
-        val content = new HTMLContent(x("fetch_url"), x("fetch_data"))
+        val content = new Message(x("fetch_url"), x("fetch_data"))
         val json = Serialization.writePretty(content)
         log.info(json)
 
