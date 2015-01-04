@@ -1,20 +1,16 @@
 package com.gravity.goose
 
-import java.io.File
 import java.util.concurrent.TimeUnit
 
 import akka.actor.{ActorSystem, Props}
 import com.gravity.goose.utils.Filter
 import com.jlab.message.{Config, RabbitMQConnection}
-import com.rabbitmq.client.Channel
-import org.apache.commons.io.FileUtils
+import com.rabbitmq.client.{Channel, MessageProperties}
 import org.json4s._
-import org.json4s.jackson.JsonMethods
 import org.json4s.native.Serialization
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
-import scala.util.Random
 
 //import org.jlab.model.{TextMessage, HTMLMessage, Message}
 
@@ -68,7 +64,7 @@ object HTMLFilter {
 //    printf("x can be null " + message)
 //    val json = JsonMethods.parse(message)
 //    val htmlMsg = json.extract[Message]
-//  println(">>> " + htmlMsg)
+//  println(">>> " + message.url)
 
     val config: Configuration = new Configuration
     config.enableImageFetching = false
@@ -77,11 +73,23 @@ object HTMLFilter {
     println(article.cleanedArticleText)
 
     val textMsg = new TextMessage(message.url, article.cleanedArticleText)
+  val json = Serialization.writePretty(textMsg)
 
+//    FileUtils.write(new File("test.json" + Random.nextLong()), Serialization.writePretty(textMsg).toString, "UTF-8")
 
-    FileUtils.write(new File("test.json" + Random.nextLong()), Serialization.writePretty(textMsg).toString, "UTF-8")
+    val connection = RabbitMQConnection.getConnection()
+    val channel = connection.createChannel()
+    channel.exchangeDeclare("WritableOut", "direct");
 
-    printf("finished")
+    // create another channel for a listener and setup the second listener
+    // channel.queueDeclare("WritableOut", false, false, false, null)
+
+    channel.basicPublish("WritableOut", "writable", MessageProperties.PERSISTENT_TEXT_PLAIN, json.getBytes())
+
+//    channel.basicPublish(exch, fullkey, MessageProperties.PERSISTENT_TEXT_PLAIN, json.getBytes())
+//    channel.basicAck(deliveryTag, false)
+
+    printf("finished clean up")
   }
 }
 

@@ -49,11 +49,11 @@ class Filter(config: Configuration) {
       doc <- getDocument(url, rawHTML)
     } {
       trace("Crawling url: " + url)
-
+      println(url)
       val extractor = getExtractor
       val docCleaner = getDocCleaner
       val outputFormatter = getOutputFormatter
-
+      println("1111111111111111")
       article.finalUrl = url
       article.rawHtml = rawHTML
       article.doc = doc
@@ -68,12 +68,12 @@ class Filter(config: Configuration) {
       article.tags = extractor.extractTags(article)
 
       article.doc = docCleaner.clean(article)
-
+      println("22222222222222222")
       extractor.calculateBestNodeBasedOnClustering(article) match {
         case Some(node: Element) => {
           article.topNode = node
           article.movies = extractor.extractVideos(article.topNode)
-
+          println("333333333333333")
           if (config.enableImageFetching) {
             trace(logPrefix + "Image fetching enabled...")
             val imageExtractor = getImageExtractor(article)
@@ -90,15 +90,17 @@ class Filter(config: Configuration) {
             }
           }
           article.topNode = extractor.postExtractionCleanup(article.topNode)
-
+          println("44444444444")
           article.cleanedArticleText = outputFormatter.getFormattedText(article.topNode)
         }
         case _ => trace("NO ARTICLE FOUND")
       }
+      println("5555555555555")
       releaseResources(article)
+      println("6666666666666666")
       article
     }
-
+    println("hereeeeeeeeeeee")
     article
   }
 
@@ -151,19 +153,23 @@ class Filter(config: Configuration) {
   */
   def releaseResources(article: Article) {
     trace(logPrefix + "STARTING TO RELEASE ALL RESOURCES")
-
+    println(config.localStoragePath)
     val dir: File = new File(config.localStoragePath)
 
-    dir.list.foreach(filename => {
-      if (filename.startsWith(article.linkhash)) {
-        val f: File = new File(dir.getAbsolutePath + "/" + filename)
-        if (!f.delete) {
-          warn("Unable to remove temp file: " + filename)
+    if (dir.exists()) {
+      dir.list.foreach(filename => {
+        println(filename)
+        if (filename.startsWith(article.linkhash)) {
+          val f: File = new File(dir.getAbsolutePath + "/" + filename)
+          if (!f.delete) {
+            warn("Unable to remove temp file: " + filename)
+          }
         }
-      }
-    })
-  }
+      })
+    }
 
+    println("abccccccccc")
+  }
 }
 
 object Filter extends Logging {

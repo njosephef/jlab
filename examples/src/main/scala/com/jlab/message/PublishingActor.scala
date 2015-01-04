@@ -15,9 +15,9 @@ class PublishingActor(channel: Channel, exchange: String) extends Actor {
    */
   def receive = {
     case some: String => {
-      val msg = (some + " : " + System.currentTimeMillis());
-      channel.basicPublish(exchange, "", null, msg.getBytes());
-      log.info(msg);
+      val msg = (some + " : " + System.currentTimeMillis())
+      channel.basicPublish(exchange, "", null, msg.getBytes())
+//      log.info(msg)
     }
     case _ => {}
   }

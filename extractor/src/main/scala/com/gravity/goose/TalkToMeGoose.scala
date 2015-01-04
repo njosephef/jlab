@@ -3,7 +3,6 @@ package com.gravity.goose
 import java.io.File
 
 import org.apache.commons.io.FileUtils
-import org.jlab.model.TextMessage
 import org.json4s.ShortTypeHints
 import org.json4s.native.Serialization
 

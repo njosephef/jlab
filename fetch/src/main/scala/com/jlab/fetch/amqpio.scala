@@ -96,6 +96,8 @@ class amqpBatchWriteback(config: Config, control: Control, channel: Channel) ext
 
         channel.basicPublish(exch, fullkey, MessageProperties.PERSISTENT_TEXT_PLAIN, json.getBytes())
         channel.basicAck(deliveryTag, false)
+
+        
         log.info("Publishing message to " + exch + " and acking delivery tag " + deliveryTag)
         resell(xs) 
       }
