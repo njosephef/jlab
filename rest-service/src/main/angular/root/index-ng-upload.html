@@ -28,10 +28,10 @@
         Post a file to <code>/app/register/image</code> and display the server response
         <br/>
 
-        <form action="/app/register/image" method="post" enctype="multipart/form-data" ng-upload>
+        <form action="/register/image" method="post" enctype="multipart/form-data" ng-upload>
             <p>
                 <label for="image">Your picture:</label>
-                <input type="file" name="image" id="image"/>
+                <input type="file" name="files[]" id="image"/>
             </p>
 
             <p>
