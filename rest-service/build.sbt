@@ -53,6 +53,8 @@ unmanagedResourceDirectories in Compile <++= baseDirectory {
   base => Seq(base / "src/main/angular")
 }
 
+watchSources += baseDirectory.value / "src" / "*.*"
+
 Revolver.settings : Seq[sbt.Def.Setting[_]]
 
 crossPaths := false

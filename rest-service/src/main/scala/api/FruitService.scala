@@ -30,6 +30,17 @@ class FruitService(fruit: ActorRef)(implicit executionContext: ExecutionContext)
           }
         }
       }
+    } ~
+    path("articles") {
+      get {
+        respondWithMediaType(`application/json`) {
+          _.complete {
+            """[
+                {"url": "http", "content": "You."},
+                {"url": "http", "content": "To play life ."},
+              ]"""
+          }
+        }
+      }
     }
-
 }
