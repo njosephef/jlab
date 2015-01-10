@@ -1,7 +1,7 @@
-var fruitapp = angular.module('fruitapp', ['restangular']);
+var fruitapp = angular.module('articleApp', ['restangular']);
 
 angular
-    .module('fruitapp')
+    .module('articleApp')
         .config(function(RestangularProvider){
             RestangularProvider.setBaseUrl('');
 });

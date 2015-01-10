@@ -7,7 +7,7 @@ angular
 
             $scope.listArticles = function() {
                 $scope.get(baseUrl).success(function (data) {
-                    $scope.articles = data;
+                    $scope.articleList = data;
                     console.log(data);
                 });
             }

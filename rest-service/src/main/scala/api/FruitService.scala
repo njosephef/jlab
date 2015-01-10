@@ -23,9 +23,9 @@ class FruitService(fruit: ActorRef)(implicit executionContext: ExecutionContext)
         respondWithMediaType(`application/json`) {
           _.complete {
             """ [
-                    {"name": "banana", "price": "0.79"},
-                     {"name": "apple", "price": "1.89"},
-                    {"name": "raspberry", "price": "12.50"}
+                    {"url": "http://alvinalexander.com/blog/post/java/how-encode-java-string-send-web-server-safe-url", "content": "// one easy string, one that's a little bit harder"},
+                    {"url": "http://alvinalexander.com/blog/post/java/how-encode-java-string-send-web-server-safe-url", "content": "// one easy string, one that's a little bit harder"},
+                    {"url": "http://alvinalexander.com/blog/post/java/how-encode-java-string-send-web-server-safe-url", "content": "// one easy string, one that's a little bit harder"}
                   ]"""
           }
         }
@@ -35,10 +35,11 @@ class FruitService(fruit: ActorRef)(implicit executionContext: ExecutionContext)
       get {
         respondWithMediaType(`application/json`) {
           _.complete {
-            """[
-                {"url": "http", "content": "You."},
-                {"url": "http", "content": "To play life ."},
-              ]"""
+            """ [
+                    {"url": "http://alvinalexander.com/blog/post/java/how-encode-java-string-send-web-server-safe-url", "content": "// one easy string, one that's a little bit harder"},
+                    {"url": "http://alvinalexander.com/blog/post/java/how-encode-java-string-send-web-server-safe-url", "content": "// one easy string, one that's a little bit harder"},
+                    {"url": "http://alvinalexander.com/blog/post/java/how-encode-java-string-send-web-server-safe-url", "content": "// one easy string, one that's a little bit harder"}
+                  ]"""
           }
         }
       }

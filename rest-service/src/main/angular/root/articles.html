@@ -7,12 +7,12 @@
 <div>
   <div ng-controller="articleController" ng-cloak>
       FRUITS CHOICE
-       <table border="2" id="articleList">
+       <table border="2" id="listArticles">
            <tr>
            <th>name</th>
            <th>price</th>
            </tr>
-           <tr ng-repeat="article in articleList">
+           <tr ng-repeat="article in listArticles">
                <td class="url">{{article.url}}</td>
                <td class="content">{{article.content}}</td>
            </tr>
@@ -23,7 +23,7 @@
   <script type="text/javascript" src="/js/angular-resource.js" > </script>
   <script type="text/javascript" src="js/restangular.js" > </script>
   <script type="text/javascript" src="/js/lodash.js" > </script>
-  <script type="text/javascript" src="/js/articles/articleApp.js"> </script>
-  <script type="text/javascript" src="/js/articles/controller.js" > </script>
+  <!--<script type="text/javascript" src="/js/articles_/articleApp.js"> </script>-->
+  <script type="text/javascript" src="/js/articles_/controller.js" > </script>
 </body>
 </html>
