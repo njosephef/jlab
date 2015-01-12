@@ -1,21 +1,25 @@
 package api
 
+import akka.dispatch.sysmsg.Create
+import core.FruitActor.FruitPojo
 import core.MessengerActor.SendMessage
-import core.MessengerActor
+import core.{FruitActor}
 import spray.routing.Directives
 import scala.concurrent.ExecutionContext
-import akka.actor.ActorRef
+import akka.actor.{ActorRef}
 import spray.http.MediaTypes._
 
 
 /**
  * Created by antoine on 3/17/14.
  */
+
 class FruitService(fruit: ActorRef)(implicit executionContext: ExecutionContext)
   extends Directives with DefaultJsonFormats {
 
 
   implicit val sendMessageFormat = jsonFormat2(SendMessage)
+  implicit val sendFruitFormat = jsonFormat2(FruitPojo)
 
   val fruitroute =
     path("fruits") {
@@ -41,6 +45,12 @@ class FruitService(fruit: ActorRef)(implicit executionContext: ExecutionContext)
                     {"url": "http://alvinalexander.com/blog/post/java/how-encode-java-string-send-web-server-safe-url", "content": "// one easy string, one that's a little bit harder"}
                   ]"""
           }
+        }
+      } ~
+      post {
+        entity(as[FruitPojo]) { someObject =>
+          println(">>>>>>> post")
+          complete(someObject)
         }
       }
     }

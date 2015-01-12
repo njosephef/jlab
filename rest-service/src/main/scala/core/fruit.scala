@@ -6,19 +6,14 @@ import core.FruitActor.FruitPojo
 
 object FruitActor {
 
-  case class FruitPojo(name:String, price:Double) {}
+  case class FruitPojo(url:String, content:String) {}
 
 }
 
 class FruitActor extends Actor {
-  import MessengerActor._
-  import EmailActor._
-  import SMSActor._
-
-
   def receive: Receive = {
     case _  =>
-      sender ! new FruitPojo("banana", 5.0)
+      sender ! new FruitPojo("banana", "abc")
   }
 }
 

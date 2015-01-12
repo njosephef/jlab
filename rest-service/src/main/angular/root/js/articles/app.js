@@ -1,9 +1,10 @@
-var fruitapp = angular.module('articleApp', ['restangular']);
+var articleApp = angular.module('articleApp', [
+    'restangular'
+]);
 
-angular
-    .module('articleApp')
-        .config(function(RestangularProvider){
-            RestangularProvider.setBaseUrl('');
+angular.module('articleApp')
+.config(function(RestangularProvider) {
+    RestangularProvider.setBaseUrl('');
 });
 
 Object.prototype.getName = function () {
