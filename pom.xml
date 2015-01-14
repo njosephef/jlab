@@ -17,7 +17,7 @@
     <module>common</module>
     <module>persistence</module>
     <module>rest-service</module>
-    <module>rest-service</module>
+    <module>simple-rpc</module>
   </modules>
 
   <dependencies>
