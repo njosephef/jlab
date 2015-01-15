@@ -1,6 +1,7 @@
 package main.scala.org.jlab.rpc
 
 import akka.actor.{Actor, Props, ActorSystem}
+import org.jlab.model.Message
 
 /**
  * Created by scorpiovn on 1/14/15.
@@ -11,10 +12,10 @@ object RemoteFetchService extends App {
 }
 
 class RemoteFetchActor extends Actor {
-  override def receive: Receive = {
-    case msg: String =>
+  def receive = {
+    case Message(msg) =>
       println(s"RemoteActor received message '$msg'")
-      sender ! "Hello from the RemoteActor"
+      sender ! Message("Hello from the RemoteActor")
     case _ => println("unknown message")
   }
 }

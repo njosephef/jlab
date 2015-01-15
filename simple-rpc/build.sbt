@@ -14,6 +14,7 @@ libraryDependencies ++= {
     "com.typesafe.akka" %% "akka-actor" % akkaVersion exclude ("org.scala-lang" , "scala-library"),
     "com.typesafe.akka" %% "akka-remote" % akkaVersion,
     "com.typesafe.akka" %% "akka-slf4j" % akkaVersion exclude ("org.slf4j", "slf4j-api")
-      exclude ("org.scala-lang" , "scala-library")
+      exclude ("org.scala-lang" , "scala-library"),
+    "org.jlab" %% "common" % "1.0.0"
   )
 }

@@ -34,7 +34,8 @@ libraryDependencies ++= {
     "com.github.detro.ghostdriver"   % "phantomjsdriver"  % "1.1.0"   % "test",
     "com.paulhammant"                % "ngwebdriver"      % "0.9.1"   % "test" ,
     "com.codahale.metrics"           % "metrics-core"     % "3.0.0"   % "test",
-   "org.hamcrest"                    % "hamcrest-all"     % "1.3"     % "test"
+    "org.hamcrest"                    % "hamcrest-all"     % "1.3"     % "test",
+    "org.jlab" %% "common" % "1.0.0"
   )
 }
 
