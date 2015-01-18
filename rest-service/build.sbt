@@ -1,9 +1,9 @@
+import sbt.Resolver.file
 import sbt._
 import Keys._
 import spray.revolver.RevolverPlugin.Revolver
 
-name := "activator-akka-spray"
-
+name := "rest-service"
 
 version := "1.0"
 
@@ -12,6 +12,12 @@ scalaVersion := "2.10.4"
 resolvers += "spray repo" at "http://repo.spray.io"
 
 resolvers += "spray nightlies" at "http://nightlies.spray.io"
+
+resolvers += "Local Ivy Repository" at "file:///"+Path.userHome+"/.ivy2/local"
+
+resolvers += "Local Maven Repository" at "file:///"+Path.userHome+"/.m2/repository"
+
+resolvers += Resolver.mavenLocal
 
 libraryDependencies ++= {
   val akkaVersion  = "2.3.7"
@@ -27,6 +33,7 @@ libraryDependencies ++= {
     "io.spray"          %% "spray-json"       % "1.2.5"              exclude ("org.scala-lang" , "scala-library"),
     "org.specs2"        %% "specs2"           % "1.14"        % "test",
     "io.spray"          % "spray-testkit"     % sprayVersion  % "test",
+    "org.json4s"        %% "json4s-native"    % "3.2.11",
     "com.typesafe.akka" %% "akka-testkit"     % akkaVersion   % "test",
     "com.novocode"      % "junit-interface"   % "0.11-RC1"    % "test->default" exclude("org.hamcrest", "hamcrest-core"),
     "org.scalatest"     %   "scalatest_2.10"  % "2.0" % "test",
@@ -35,7 +42,7 @@ libraryDependencies ++= {
     "com.paulhammant"                % "ngwebdriver"      % "0.9.1"   % "test" ,
     "com.codahale.metrics"           % "metrics-core"     % "3.0.0"   % "test",
     "org.hamcrest"                    % "hamcrest-all"     % "1.3"     % "test",
-    "org.jlab" %% "common" % "1.0.0"
+    "org.jlab" % "common" % "1.0.0"
   )
 }
 

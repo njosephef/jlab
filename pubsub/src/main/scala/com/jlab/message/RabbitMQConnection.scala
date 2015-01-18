@@ -10,8 +10,8 @@ object RabbitMQConnection {
   private val connection: Connection = null;
 
   /**
-   * Return a connection if one doesn't exist. Else create
-   * a new one
+   * Return a connection if one doesn't exist.
+   * Else create a new one
    */
   def getConnection(): Connection = {
     connection match {

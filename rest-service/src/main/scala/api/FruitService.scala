@@ -1,13 +1,14 @@
 package api
 
-import akka.dispatch.sysmsg.Create
 import core.FruitActor.FruitPojo
 import core.MessengerActor.SendMessage
-import core.{FruitActor}
+import org.jlab.model.{Article, Start}
+import org.jlab.rpc.RequestActor
 import spray.routing.Directives
 import scala.concurrent.ExecutionContext
-import akka.actor.{ActorRef}
+import akka.actor.{Actor, Props, ActorSystem, ActorRef}
 import spray.http.MediaTypes._
+import akka.pattern.ask
 
 
 /**
@@ -18,8 +19,10 @@ class FruitService(fruit: ActorRef)(implicit executionContext: ExecutionContext)
   extends Directives with DefaultJsonFormats {
 
 
+
   implicit val sendMessageFormat = jsonFormat2(SendMessage)
   implicit val sendFruitFormat = jsonFormat2(FruitPojo)
+  implicit val sendArticleFormat = jsonFormat2(Article)
 
   val fruitroute =
     path("fruits") {
@@ -48,8 +51,10 @@ class FruitService(fruit: ActorRef)(implicit executionContext: ExecutionContext)
         }
       } ~
       post {
-        entity(as[FruitPojo]) { someObject =>
+        entity(as[Article]) { someObject =>
           println(">>>>>>> post")
+//          requestActor ! someObject
+//          complete(someObject)
           complete(someObject)
         }
       }

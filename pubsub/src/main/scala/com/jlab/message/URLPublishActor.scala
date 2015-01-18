@@ -12,6 +12,18 @@ import scala.io.Source
 class URLPublishActor(channel: Channel, queue: String) extends Actor {
   val log = Logging(context.system, this)
   def receive = {
+    case url: String =>
+      log.info(url)
+      val msg = """{"fetch_url" : """ + url + """}"""
+      channel.basicPublish("", queue, null, msg.getBytes)
+
+    case _ => {}
+  }
+}
+
+/*class URLPublishActor(channel: Channel, queue: String) extends Actor {
+  val log = Logging(context.system, this)
+  def receive = {
     case some: String => {
       log.info(some)
       def homeDir(envar: Option[String]) = envar match {
@@ -29,4 +41,4 @@ class URLPublishActor(channel: Channel, queue: String) extends Actor {
     }
     case _ => {}
   }
-}
+}*/
