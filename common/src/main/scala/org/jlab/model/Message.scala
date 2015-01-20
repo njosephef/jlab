@@ -13,3 +13,4 @@ case class HTMLContent(url:String, html:String)
 case class Message(msg: String)
 
 case class Article(url: String, content: String)
+case class ExtractedArticle(url: String, content: String)
