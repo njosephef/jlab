@@ -2,9 +2,10 @@ package com.netaporter.routing
 
 import akka.actor.{Props, Actor}
 import com.netaporter._
+import org.jlab.model.Article
 import spray.routing.{Route, HttpService}
-import com.netaporter.core.GetPetsWithOwnersActor
-import com.netaporter.clients.{OwnerClient, PetClient}
+import com.netaporter.core.{GetPrettyArticleActor, GetPetsWithOwnersActor}
+import com.netaporter.clients.{CrawlClient, CleanClient, OwnerClient, PetClient}
 
 class RestRouting extends HttpService with Actor with PerRequestCreator {
 
@@ -15,6 +16,9 @@ class RestRouting extends HttpService with Actor with PerRequestCreator {
   val petService = context.actorOf(Props[PetClient])
   val ownerService = context.actorOf(Props[OwnerClient])
 
+  val crawlService = context.actorOf(Props[CrawlClient])
+  val cleanService = context.actorOf(Props[CleanClient])
+
   val route = {
     get {
       path("pets") {
@@ -23,10 +27,21 @@ class RestRouting extends HttpService with Actor with PerRequestCreator {
             GetPetsWithOwners(names.split(',').toList)
           }
         }
+      } ~
+      path("article") {
+        parameter('url) { url =>
+          cleanedArticle {
+            GetArticle(new Article(url, ""))
+          }
+        }
       }
     }
   }
 
   def petsWithOwner(message : RestMessage): Route =
     ctx => perRequest(ctx, Props(new GetPetsWithOwnersActor(petService, ownerService)), message)
+
+  def cleanedArticle(message : RestMessage): Route =
+    ctx => perRequest(ctx, Props(new GetPrettyArticleActor(crawlService, cleanService)), message)
+
 }

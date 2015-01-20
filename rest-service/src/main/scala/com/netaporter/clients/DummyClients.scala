@@ -1,9 +1,12 @@
 package com.netaporter.clients
 
-import akka.actor.Actor
+import akka.actor.{ActorLogging, Actor}
 import com.netaporter._
+import com.netaporter.clients.CleanClient.{CleanArticle, GetCleanArticle}
+import com.netaporter.clients.CrawlClient.{CrawlArticle, GetCrawlArticle}
 import com.netaporter.clients.PetClient._
 import com.netaporter.clients.OwnerClient._
+import org.jlab.model.Article
 
 /**
  * This could be:
@@ -45,4 +48,30 @@ class OwnerClient extends Actor {
 object OwnerClient {
   case class GetOwnersForPets(petNames: Seq[String])
   case class OwnersForPets(owners: Seq[Owner])
+}
+
+class CrawlClient extends Actor with ActorLogging {
+  def receive = {
+    case GetCrawlArticle(article) => {
+      Thread.sleep(5000); log.info("finished crawling")
+      sender ! CrawlArticle(article)
+    }
+  }
+}
+object CrawlClient {
+  case class GetCrawlArticle(article: Article)
+  case class CrawlArticle(article: Article)
+}
+
+class CleanClient extends Actor with ActorLogging {
+  def receive = {
+    case GetCleanArticle(article) => {
+      Thread.sleep(5000); log.info("finished crawling")
+      sender ! CleanArticle(article)
+    }
+  }
+}
+object CleanClient {
+  case class GetCleanArticle(article: Article)
+  case class CleanArticle(article: Article)
 }
