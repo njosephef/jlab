@@ -1,18 +1,10 @@
 package com.netaporter.core
 
-import akka.actor.{ActorRef, Actor}
-import com.netaporter.clients.{OwnerClient, PetClient}
 import akka.actor.SupervisorStrategy.Escalate
-import com.netaporter._
-import PetClient.GetPets
-import PetClient.Pets
-import OwnerClient.GetOwnersForPets
-import scala.Some
-import OwnerClient.OwnersForPets
-import com.netaporter.Pet
-import com.netaporter.Owner
-import com.netaporter.GetPetsWithOwners
-import akka.actor.OneForOneStrategy
+import akka.actor.{Actor, ActorLogging, ActorRef, OneForOneStrategy}
+import com.netaporter.clients.OwnerClient.{GetOwnersForPets, OwnersForPets}
+import com.netaporter.clients.PetClient.{GetPets, Pets}
+import com.netaporter.{GetPetsWithOwners, Owner, Pet, _}
 
 /**
  * The job of this Actor in our application core is to service a request
@@ -22,7 +14,7 @@ import akka.actor.OneForOneStrategy
  *  - One requests for a list the pets by their names
  *  - A separate request for a list of owners by their pet names
  */
-class GetPetsWithOwnersActor(petService: ActorRef, ownerService: ActorRef) extends Actor {
+class GetPetsWithOwnersActor(petService: ActorRef, ownerService: ActorRef) extends Actor with ActorLogging {
 
   var pets = Option.empty[Seq[Pet]]
   var owners = Option.empty[Seq[Owner]]
@@ -31,9 +23,9 @@ class GetPetsWithOwnersActor(petService: ActorRef, ownerService: ActorRef) exten
     case GetPetsWithOwners(names) if names.size > 2 => throw PetOverflowException
 
     case GetPetsWithOwners(names) => {
-      petService ! GetPets(names)
-      ownerService ! GetOwnersForPets(names)
-      context.become(waitingResponses)
+      log.info("get pets request"); petService ! GetPets(names)
+      log.info("get owners for pets"); ownerService ! GetOwnersForPets(names)
+      log.info("--> waiting responses"); context.become(waitingResponses)
     }
   }
 

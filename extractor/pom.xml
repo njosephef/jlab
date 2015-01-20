@@ -18,12 +18,12 @@
   <dependencies>
     <dependency>
       <groupId>org.jlab</groupId>
-      <artifactId>common</artifactId>
+      <artifactId>pubsub</artifactId>
       <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.jlab</groupId>
-      <artifactId>examples</artifactId>
+      <artifactId>common</artifactId>
       <version>1.0.0</version>
     </dependency>
     <dependency>

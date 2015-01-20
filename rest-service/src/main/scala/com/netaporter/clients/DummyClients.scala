@@ -15,7 +15,7 @@ class PetClient extends Actor {
   def receive = {
     case GetPets("Lion" :: _)     => sender ! Validation("Lions are too dangerous!")
     case GetPets("Tortoise" :: _) => () // Never send a response. Tortoises are too slow
-    case GetPets(petNames)        => sender ! Pets(petNames.map(Pet.apply))
+    case GetPets(petNames)        => Thread.sleep(9000); sender ! Pets(petNames.map(Pet.apply))
   }
 }
 object PetClient {
@@ -33,8 +33,8 @@ class OwnerClient extends Actor {
   def receive = {
     case GetOwnersForPets(petNames) => {
       val owners = petNames map {
-        case "Lassie"        => Owner("Jeff Morrow")
-        case "Brian Griffin" => Owner("Peter Griffin")
+        case "Lassie"        => Thread.sleep(5000); Owner("Jeff Morrow")
+        case "Brian Griffin" => Thread.sleep(7000); Owner("Peter Griffin")
         case "Tweety"        => Owner("Granny")
         case _               => Owner("Jeff") // Jeff has a lot of pets
       }

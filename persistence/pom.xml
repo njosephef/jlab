@@ -15,7 +15,7 @@
   <dependencies>
     <dependency>
       <groupId>org.jlab</groupId>
-      <artifactId>examples</artifactId>
+      <artifactId>pubsub</artifactId>
       <version>1.0.0</version>
     </dependency>
     <!-- Spring framework -->

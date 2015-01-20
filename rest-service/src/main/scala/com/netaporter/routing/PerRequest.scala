@@ -22,7 +22,7 @@ trait PerRequest extends Actor with Json4sSupport {
   def target: ActorRef
   def message: RestMessage
 
-  setReceiveTimeout(2.seconds)
+  setReceiveTimeout(15.seconds)
   target ! message
 
   def receive = {
@@ -49,6 +49,7 @@ object PerRequest {
   case class WithActorRef(r: RequestContext, target: ActorRef, message: RestMessage) extends PerRequest
 
   case class WithProps(r: RequestContext, props: Props, message: RestMessage) extends PerRequest {
+    println("per request with props")
     lazy val target = context.actorOf(props)
   }
 }
