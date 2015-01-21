@@ -2,8 +2,8 @@ package com.netaporter.clients
 
 import akka.actor.{ActorLogging, Actor}
 import com.netaporter._
-import com.netaporter.clients.CleanClient.{CleanArticle, GetCleanArticle}
-import com.netaporter.clients.CrawlClient.{CrawlArticle, GetCrawlArticle}
+import com.netaporter.clients.CleanClient.{PlainArticle, GetPlainArticle}
+import com.netaporter.clients.CrawlClient.{OriginalArticle, GetOriginalArticle}
 import com.netaporter.clients.PetClient._
 import com.netaporter.clients.OwnerClient._
 import org.jlab.model.Article
@@ -52,26 +52,29 @@ object OwnerClient {
 
 class CrawlClient extends Actor with ActorLogging {
   def receive = {
-    case GetCrawlArticle(article) => {
-      Thread.sleep(5000); log.info("finished crawling")
-      sender ! CrawlArticle(article)
+    case GetOriginalArticle(urlRequest) => {
+      log.info("start crawling the web page by the url " + urlRequest.url)
+      Thread.sleep(5000)
+      val article = new Article(urlRequest.url, "html")
+      log.info("Crawler finishes its job and send the content back")
+      sender ! OriginalArticle(article)
     }
   }
 }
 object CrawlClient {
-  case class GetCrawlArticle(article: Article)
-  case class CrawlArticle(article: Article)
+  case class GetOriginalArticle(urlRequest: UrlRequest)
+  case class OriginalArticle(article: Article)
 }
 
 class CleanClient extends Actor with ActorLogging {
   def receive = {
-    case GetCleanArticle(article) => {
-      Thread.sleep(5000); log.info("finished crawling")
-      sender ! CleanArticle(article)
+    case GetPlainArticle(article) => {
+      Thread.sleep(5000); log.info("cleaning up the html and send back")
+      sender ! PlainArticle(article)
     }
   }
 }
 object CleanClient {
-  case class GetCleanArticle(article: Article)
-  case class CleanArticle(article: Article)
+  case class GetPlainArticle(article: Article)
+  case class PlainArticle(article: Article)
 }

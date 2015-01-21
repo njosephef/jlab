@@ -9,9 +9,11 @@ trait RestMessage
 case class GetPetsWithOwners(petNames: List[String]) extends RestMessage
 case class PetsWithOwners(pets: Seq[EnrichedPet]) extends RestMessage
 
-case class GetArticle(article: Article) extends RestMessage
+case class GetArticle(urlRequest: UrlRequest) extends RestMessage
 case class GetExtractedArticle(article: Article) extends RestMessage
 case class PrettyArticle(article: Article) extends RestMessage
+
+case class UrlRequest(url: String) extends RestMessage
 
 // Domain objects
 

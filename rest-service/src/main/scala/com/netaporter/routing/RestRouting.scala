@@ -31,7 +31,7 @@ class RestRouting extends HttpService with Actor with PerRequestCreator {
       path("article") {
         parameter('url) { url =>
           cleanedArticle {
-            GetArticle(new Article(url, ""))
+            GetArticle(new UrlRequest(url))
           }
         }
       }
