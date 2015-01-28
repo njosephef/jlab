@@ -96,8 +96,6 @@ class HttpFetcher(config: Config,
   def process(data: Data): Data = {
 
     val out = List[(String, String)](
-//      ("fetch_version", Version.versionString),
-//      ("fetch_format_version", Version.formatVersionString),
       ("fetch_host", hostname)
     )
 
