@@ -66,7 +66,6 @@ class HttpFetcher(config: Config,
 
   def fetch(url: String, proxy: Option[(String, Int)], headers: List[(String, String)]) = {
     Thread.sleep(interval)
-    val startTime = Time.convertoMilisecond
 
     proxy match {
       case Some((h, p)) => client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, new HttpHost(h, p))
@@ -91,10 +90,7 @@ class HttpFetcher(config: Config,
     val code = status.getStatusCode()
     EntityUtils.consume(entity)
 
-    val endTime = Time.convertoMilisecond
-    val lat = endTime - startTime
-
-    (status, code, page, lat, redirect)
+    (status, code, page, redirect)
   }
 
   def process(data: Data): Data = {
@@ -127,7 +123,7 @@ class HttpFetcher(config: Config,
 
       val res = try {
         log.info(" Fetching urls")
-        val (status, code, page, latency, redirect) = fetch(url, proxy, headers)
+        val (status, code, page, redirect) = fetch(url, proxy, headers)
 
         log.info("compress status " + compress)
         log.info("compress status " + data.getOption("fetch_compress"))
@@ -138,9 +134,6 @@ class HttpFetcher(config: Config,
 //        val retcode = code.toString
 
         val o0 =
-          ("fetch_time", Time.convertoSecond.toString) ::
-          ("fetch_latency", latency.toString) ::
-          ("fetch_size", page.length.toString) ::
           ("fetch_status_code", code.toString) ::
           ("fetch_status_line", status.toString) ::
           ("fetch_error", "false") ::
@@ -158,8 +151,6 @@ class HttpFetcher(config: Config,
           case Some(s) => log.info("         Proxy " + s);
           case None => ()
         }
-
-        log.info("         Latency " + latency)
 
         if (code >= 200 && code < 300) {
           /*("fetch_compress", if (compress) "zip64" else "none") ::("fetch_data", zpage) :: o*/
