@@ -16,7 +16,7 @@ case class Stats(l: List[(String, String)]) extends Ctrl
 // Get stats as a message
 case class NoData() extends Ctrl
 
-case class PseudoTimeout() extends Ctrl
+//case class PseudoTimeout() extends Ctrl
 
 case class DataReq(req: ActorRef, n: Int) extends Ctrl
 
