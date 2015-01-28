@@ -52,5 +52,4 @@ object Encoding {
     bos.close();
     bos.toByteArray();
   }
-
 }

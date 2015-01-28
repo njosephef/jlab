@@ -72,13 +72,13 @@ class amqpBatchWriteback(config: Config, control: Control, channel: Channel) ext
               case _ => "Error" 
             }
         } catch { case _ => "Error" }
+
         log.info(">>>>> " + x("fetch_status_code"))
         val fqp = "fetch_routing_key"
 //        log.info(x(fqp))
         val fullkey = if(x exists fqp) { x(fqp)+ ":" + key } else { key }
 //        log.info(x("fetch_data"))
         log.info(fullkey)
-
 
         // get just important information, fetch_url and fetch_data
         // then convert them to a json string
@@ -97,7 +97,6 @@ class amqpBatchWriteback(config: Config, control: Control, channel: Channel) ext
         channel.basicPublish(exch, fullkey, MessageProperties.PERSISTENT_TEXT_PLAIN, json.getBytes())
         channel.basicAck(deliveryTag, false)
 
-        
         log.info("Publishing message to " + exch + " and acking delivery tag " + deliveryTag)
         resell(xs) 
       }

@@ -17,5 +17,4 @@ object AmpqUtil {
   def pushURLFile(f:String, exch:String) = {
     pushURLList( scala.io.Source.fromFile(f).getLines.toList, exch )
   }
-
 }

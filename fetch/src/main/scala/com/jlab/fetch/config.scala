@@ -37,7 +37,6 @@ class Config(d: Data) {
   def unwrapArray(s: String): List[Config] = {
     (data unwrapArray s) map (new Config(_))
   }
-
 }
 
 object Config {
@@ -64,5 +63,4 @@ object Config {
   def showConfigs() = {
     configs.toList.map(kkv => (kkv._1, kkv._2._2("description")))
   }
-
 }

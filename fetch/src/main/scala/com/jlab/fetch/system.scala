@@ -12,8 +12,7 @@ class System(config: Config) {
   val name = config("instance")
   val control = new PipelineControl(config)
 
-  val pipelines =
-    if (config exists "proxies") {
+  val pipelines = if (config exists "proxies") {
       val proxies = (config unwrapArray "proxies") map (p => (p("host"), p("port")))
       proxies map (pkv =>
         (config unwrapArray "pipelines") map (c => new Pipeline(c ++ (("proxy_host", pkv._1) ::("proxy_port", pkv._2) :: Nil), control, asys))) flatten
@@ -27,18 +26,16 @@ class System(config: Config) {
 }
 
 object System {
-
-  val actorSystem = ActorSystem("Fureteur")
-  var i = 0
+  val actorSystem = ActorSystem("Fetcher")
+  var identifier = 0
 
   def unique(s: String) = {
-    i += 1
-    s + i.toString
+    identifier += 1
+    s + identifier.toString
   }
 }
 
 class Pipeline(config: Config, control: Control, actorSystem: ActorSystem) {
-
   val amqpConnection = {
     (config exists "amqp") match {
       case true => createAmqpConnection(config.getObject("amqp"))
@@ -102,9 +99,7 @@ class Pipeline(config: Config, control: Control, actorSystem: ActorSystem) {
         ("virtualHost", factory.setVirtualHost(_))
       )
     
-    listUserConfig foreach (x => if (config exists x._1) {
-      x._2(config(x._1))
-    })
+    listUserConfig foreach ( x => if ( config exists x._1 ) { x._2(config(x._1)) } )
 
     val conn = factory.newConnection()
     val chan = conn.createChannel()
@@ -114,5 +109,4 @@ class Pipeline(config: Config, control: Control, actorSystem: ActorSystem) {
 
     (conn, chan)
   }
-
 }
