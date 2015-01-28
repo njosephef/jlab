@@ -22,9 +22,6 @@ object Fureteur {
           println("Available configs:")
           Config.showConfigs().map(kv => println(" " + kv._1 + "   # " + kv._2))
           return
-        case "version" =>
-          println(Version.versionString)
-          return
       }
 
     } catch {
@@ -33,7 +30,6 @@ object Fureteur {
         println("       fureteur load <config path>   # Start execution using the provided config file")
         println("       fureteur show <config name>   # Dump a local config to STDOUT")
         println("       fureteur list                 # Show available local config")
-        println("       fureteur version              # Show version")
         return
     }
 
@@ -64,15 +60,13 @@ object LocalConfig {
   "conf" : "f2f",                                -- Configuration name
   "description" : "File to file operation",      -- Description
   "usage" : "f2f <input file> <output file>",    -- Usage
-  "instance" : "fureteur",                       -- Instance name 
-  "fetch_compress" : "none",
+  "instance" : "fureteur"                       -- Instance name
   "pipelines" : [                                -- Pipelines
     {
       "httpManager" : {                          -- The http connection manager
           "max_connection" : "2",
           "max_connection_per_route" : "2",
-          "min_interval_ms" : "1000",
-          "fetch_compress" : "none"
+          "min_interval_ms" : "1000"
         },  
 
       "prefetcher" : { "class" : "fileBatchPrefetcher",     -- Prefetching from files
@@ -112,16 +106,14 @@ object LocalConfig {
       "httpManager" : {
           "max_connection" : "2",
           "max_connection_per_route" : "2",
-          "min_interval_ms" : "1000",
-          "fetch_compress" : "none"
+          "min_interval_ms" : "1000"
         },  
 
       "prefetcher" : { "class" : "amqpBatchPrefetcher",
                        "queue" : "FetchIn",
                        "batch_size" : "50",
                        "threshold_in_batches" : "3",
-                       "timeout_ms" : "1000",
-                       "fetch_compress" : "none"
+                       "timeout_ms" : "1000"
                     },
       "httpFetchers": [ { "threshold_in" : "10",
                           "threshold_out" : "50",
