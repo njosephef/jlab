@@ -103,13 +103,6 @@ class HttpFetcher(config: Config,
 
     val urls = if (data exists "fetch_url") data("fetch_url") :: Nil else data("fetch_urls").split(" ").toList
 
-    val compress = data.getOption("fetch_compress") match {
-      case None | Some("true") => true
-      case _ => false
-    }
-
-//    data + ("fetch_compress", "none")
-
 //    log.info("data information " + data.toJson())
 
     val proxy = if (data exists "fetch_proxy_host")
@@ -125,10 +118,6 @@ class HttpFetcher(config: Config,
         log.info(" Fetching urls")
         val (status, code, page, redirect) = fetch(url, proxy, headers)
 
-        log.info("compress status " + compress)
-        log.info("compress status " + data.getOption("fetch_compress"))
-
-        /*val zpage = if (compress) Encoding.byteToZippedString64(page) else new String(page)*/
         val zpage = new String(page)
 
 //        val retcode = code.toString
@@ -153,8 +142,6 @@ class HttpFetcher(config: Config,
         }
 
         if (code >= 200 && code < 300) {
-          /*("fetch_compress", if (compress) "zip64" else "none") ::("fetch_data", zpage) :: o*/
-//          ("fetch_compress", "none") ::("fetch_data", zpage) :: o
           ("fetch_data", zpage) :: o
         }
         else o
