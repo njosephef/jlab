@@ -9,7 +9,7 @@ import org.json4s.jackson.Serialization
 case class Message(url:String, html:String)
 
 // Taking URLs in batches from a file
-class fileBatchPrefetcher(config: Config, control: Control)
+class BatchPrefetcher(config: Config, control: Control)
   extends genericBatchProducer[Data](config.getInt("batch_size"),
     config.getInt("threshold_in_batches"),
     config.getLongOption("timeout_ms"), control) {
@@ -35,7 +35,7 @@ class fileBatchPrefetcher(config: Config, control: Control)
 }
 
 
-class fileBatchWriteback(config: Config, control: Control) extends genericBatchReseller[Data](control) {
+class BatchWriteback(config: Config, control: Control) extends genericBatchReseller[Data](control) {
 
   //val log = Logging(context.system, this)
   val fileName = config("file_name")

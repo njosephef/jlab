@@ -36,12 +36,6 @@ object System {
 }
 
 class Pipeline(config: Config, control: Control, actorSystem: ActorSystem) {
-  val amqpConnection = {
-    (config exists "amqp") match {
-      case true => createAmqpConnection(config.getObject("amqp"))
-      case _ => null
-    }
-  }
 
   val prefetch = createPrefetcher(config.getObject("prefetcher"))
 
@@ -64,49 +58,10 @@ class Pipeline(config: Config, control: Control, actorSystem: ActorSystem) {
   }
 
   def createPrefetcher(config: Config): ActorRef = {
-    val klass = config("class")
-    klass match {
-      case "fileBatchPrefetcher" => actorSystem.actorOf(Props(new fileBatchPrefetcher(config, control)))
-      case "amqpBatchPrefetcher" => actorSystem.actorOf(Props(new amqpBatchPrefetcher(config, control, amqpConnection._2)))
-      case (e: String) => throw (new ClassNotFound(e))
-    }
+    actorSystem.actorOf(Props(new BatchPrefetcher(config, control)))
   }
 
   def createWriteback(config: Config): ActorRef = {
-    val klass = config("class")
-    println("klass >>> " + klass)
-    klass match {
-      case "fileBatchWriteback" => actorSystem.actorOf(Props(new fileBatchWriteback(config, control)))
-      case "amqpBatchWriteback" =>
-        amqpConnection._2.exchangeDeclare(config("exchange"), "direct")
-        actorSystem.actorOf(Props(new amqpBatchWriteback(config, control, amqpConnection._2)))
-      case (e: String) => throw (new ClassNotFound(e))
-    }
-  }
-
-  def createAmqpConnection(config: Config) = {
-    val factory = new ConnectionFactory() // This will come from the config
-    /* factory.setUri() doesn't work, not sure why
-     (config getOption "uri") match {
-      case Some(uri:String) => //factory.setUri(uri)
-      case _ => ()
-    } */
-    
-    val listUserConfig = List(("user", factory.setUsername(_)),
-        ("password", factory.setPassword(_)),
-        ("host", factory.setHost(_)),
-        ("port", (s: String) => factory.setPort(s.toInt)),
-        ("virtualHost", factory.setVirtualHost(_))
-      )
-    
-    listUserConfig foreach ( x => if ( config exists x._1 ) { x._2(config(x._1)) } )
-
-    val conn = factory.newConnection()
-    val chan = conn.createChannel()
-
-    println(conn)
-    println(chan)
-
-    (conn, chan)
+    actorSystem.actorOf(Props(new BatchWriteback(config, control)))
   }
 }

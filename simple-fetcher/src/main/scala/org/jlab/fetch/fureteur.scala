@@ -84,7 +84,7 @@ object LocalConfig {
                           "timeout_ms" : "1000"             -- Output timeout (for second fetcher)
                         }
                       ],
-      "writeback" :{ "class" : "fileBatchWriteback",        -- Writing back to file
+      "writeback" :{
                      "file_name" : "fureteur_out"           -- File name
                    }
     }
@@ -92,45 +92,5 @@ object LocalConfig {
 }
     """
 
-  val c1 =
-    """
-{
-  "conf" : "r2r",
-  "description" : "Input/output from RabbitMQ",
-  "usage" : "r2r",
-  "instance" : "fureteur",
-
-  "pipelines" : [
-    {
-      "amqp" : { },
-      "httpManager" : {
-          "max_connection" : "2",
-          "max_connection_per_route" : "2",
-          "min_interval_ms" : "1000"
-        },  
-
-      "prefetcher" : { "class" : "amqpBatchPrefetcher",
-                       "queue" : "FetchIn",
-                       "batch_size" : "50",
-                       "threshold_in_batches" : "3",
-                       "timeout_ms" : "1000"
-                    },
-      "httpFetchers": [ { "threshold_in" : "10",
-                          "threshold_out" : "50",
-                          "timeout_ms" : "1000"
-                        },
-                        { "threshold_in" : "10",
-                          "threshold_out" : "50",
-                          "timeout_ms" : "1000"
-                        }
-                      ],
-      "writeback" :{ "class" : "amqpBatchWriteback",
-                     "exchange" : "FetchOut"
-                   }
-    }
-  ]
-}
-    """
-
-  val localConfigs = List[String](c0, c1)
+  val localConfigs = List[String](c0)
 }
