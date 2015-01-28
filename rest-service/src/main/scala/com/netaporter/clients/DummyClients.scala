@@ -54,7 +54,10 @@ class CrawlClient extends Actor with ActorLogging {
   def receive = {
     case GetOriginalArticle(urlRequest) => {
       log.info("start crawling the web page by the url " + urlRequest.url)
-      Thread.sleep(5000)
+//      Thread.sleep(5000)
+
+
+
       val article = new Article(urlRequest.url, "html")
       log.info("Crawler finishes its job and send the content back")
       sender ! OriginalArticle(article)
