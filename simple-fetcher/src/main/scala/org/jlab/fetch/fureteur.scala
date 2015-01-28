@@ -13,6 +13,7 @@ object Fureteur {
       args(0) match {
         case "run" =>
           config = Some(Config.getConfig(args(1)))
+          println(args(1))
         case "load" =>
           config = Some(Config.fromJson(LocalConfig.prepareConfigString(scala.io.Source.fromFile(args(1)).mkString)))
         case "show" =>
