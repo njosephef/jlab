@@ -1,8 +1,8 @@
 package com.jlab.fetch
 
-object Fureteur {
+object Fureteur extends App {
 
-  def main(args: Array[String]) {
+  /*def main(args: Array[String]) {
 
     // Register local configs
     LocalConfig.registerLocalConfigs()
@@ -36,7 +36,7 @@ object Fureteur {
 
     val system = new System(config get)
     system.start()
-  }
+  }*/
 
   def start(config: String) = {
     val system = new System(Config.fromJson(config))
@@ -70,7 +70,7 @@ object LocalConfig {
           "min_interval_ms" : "1000"
         },  
 
-      "prefetcher" : { "class" : "fileBatchPrefetcher",     -- Prefetching from files
+      "prefetcher" : {
                        "file_name" : "fureteur_in",         -- Input file name
                        "batch_size" : "50",                 -- Batch size when retrieving items from files
                        "threshold_in_batches" : "3",        -- Threshold (expressed in number of bacthes)

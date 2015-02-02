@@ -1,0 +1,24 @@
+{
+  "httpManager": {
+    "maxConnection": 2,
+    "maxConnectionPerRoute": 2,
+    "interval": 1000
+  },
+  "prefetcher": {
+    "batchSize": 50,
+    "threshold": 3,
+    "timeout": 1000
+  },
+  "httpFetchers": [
+    {
+      "thresholdIn": 10,
+      "thresholdOut": 50,
+      "timeout": 1000
+    },
+    {
+      "thresholdIn": 10,
+      "thresholdOut": 50,
+      "timeout": 1000
+    }
+  ]
+}
